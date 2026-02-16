@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Palette */
+:root {
+  --color-sky: rgb(0, 173, 181);
+  --color-gold: rgb(229, 168, 63);
+  --color-dark: rgb(47, 41, 40);
+  --color-light: rgb(252, 250, 234);
+
+  --background: var(--color-light);
+  --foreground: #171717;
+
+  /* Accent system */
+  --accent: var(--color-sky);
+}
+
+.dark {
+  --background: var(--color-dark);
+  --foreground: #ffffff;
+
+  /* Accent switches automatically */
+  --accent: var(--color-gold);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
