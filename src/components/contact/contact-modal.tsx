@@ -67,7 +67,7 @@ export default function ContactModal() {
             </h2>
 
             <p className="opacity-70">
-              Tell us about your project and we'll help you find the right match.
+              Tell us about your project and we&apos;ll help you find the right match.
             </p>
 
             <form className="space-y-5">
