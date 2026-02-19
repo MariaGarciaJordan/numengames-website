@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    globals: true,
-    setupFiles: "./vitest.setup.ts"
+    globals: true, // ← ESTO ES CLAVE
+    setupFiles: ["./src/test/setup.ts"],
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src")
-    }
-  }
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });
