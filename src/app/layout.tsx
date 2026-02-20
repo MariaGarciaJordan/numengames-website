@@ -1,44 +1,42 @@
-import type { Metadata } from "next";
 import "./globals.css";
-
-import { Geist, Libre_Baskerville } from "next/font/google";
-
-import { ThemeProvider } from "@/context/theme-provider";
+import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-heading"
-});
-
-const baskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-body"
-});
-
-export const metadata: Metadata = {
-  title: "Numen Games",
-  description: "Transforming work into a creative adventure"
-};
+import { getMessages } from "next-intl/server";
+import { ThemeProvider } from "@/context/theme-provider";
+import SiteLayout from "@/components/layout/site-layout";
 
 export default async function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  const locale = await getLocale();
+  const locale = "en";
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className={`${geist.variable} ${baskerville.variable}`}>
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-        </ThemeProvider>
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/* Evita flash de tema (si hay theme guardado) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                  const stored = localStorage.getItem("theme");
+                  if (stored === "dark") document.documentElement.classList.add("dark");
+                  else document.documentElement.classList.remove("dark");
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProvider>
+            <SiteLayout>{children}</SiteLayout>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,18 +1,13 @@
-import Header from "./header";
-import Footer from "./footer";
+import type { ReactNode } from "react";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 
-export default function SiteLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen">
+    <>
       <Header />
-      <div className="pt-20">
-        {children}
-      </div>
+      <main>{children}</main>
       <Footer />
-    </div>
+    </>
   );
 }

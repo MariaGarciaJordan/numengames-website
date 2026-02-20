@@ -3,46 +3,48 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Container from "./container";
+import Container from "@/components/layout/container";
 import LanguageSwitcher from "@/components/language-switcher";
 import { useTheme } from "@/context/theme-provider";
-import MobileMenu from "./mobile-menu";
-import ContactModal from "./contact-modal";
+import MobileMenu from "@/components/layout/mobile-menu";
+import ContactModal from "@/components/layout/contact-modal";
 
 const NAV_ITEMS = [
   { label: "Services", href: "/services" },
   { label: "Company", href: "/company" },
-  { label: "Pricing", href: "/pricing" }
+  { label: "Pricing", href: "/pricing" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
-  const { toggle } = useTheme();
+  const { toggleTheme } = useTheme();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow =
-      mobileOpen || contactOpen ? "hidden" : "";
+    document.body.style.overflow = mobileOpen || contactOpen ? "hidden" : "";
   }, [mobileOpen, contactOpen]);
 
   return (
     <>
       <header
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+        className={[
+          "fixed top-0 z-50 w-full transition-all duration-500",
           scrolled
             ? "bg-[var(--background)]/85 backdrop-blur-md border-b border-current/10"
-            : "bg-transparent"
-        }`}
+            : "bg-transparent",
+        ].join(" ")}
       >
-        <Container className="flex h-24 items-center justify-between">
+        <Container className="flex h-20 items-center justify-between md:h-24">
           <Link href="/" className="text-xl font-semibold tracking-tight">
             Numen Games
           </Link>
@@ -85,8 +87,10 @@ export default function Header() {
             </div>
 
             <button
-              onClick={toggle}
+              onClick={toggleTheme}
               className="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full border border-current/15"
+              aria-label="Toggle theme"
+              type="button"
             >
               ◐
             </button>
@@ -94,6 +98,8 @@ export default function Header() {
             <button
               onClick={() => setMobileOpen(true)}
               className="md:hidden text-2xl"
+              aria-label="Open menu"
+              type="button"
             >
               ☰
             </button>
@@ -101,15 +107,9 @@ export default function Header() {
         </Container>
       </header>
 
-      <MobileMenu
-        isOpen={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-      />
+      <MobileMenu isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      <ContactModal
-        isOpen={contactOpen}
-        onClose={() => setContactOpen(false)}
-      />
+      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
     </>
   );
 }
