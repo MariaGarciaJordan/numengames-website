@@ -17,6 +17,7 @@ const NAV_ITEMS = [
 
 export default function Header() {
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const { toggleTheme } = useTheme();
 
   const [scrolled, setScrolled] = useState(false);
@@ -24,7 +25,7 @@ export default function Header() {
   const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 80);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -34,14 +35,23 @@ export default function Header() {
     document.body.style.overflow = mobileOpen || contactOpen ? "hidden" : "";
   }, [mobileOpen, contactOpen]);
 
+  /**
+   * En homepage:
+   * - Invisible al inicio
+   * - Aparece suave al hacer scroll
+   * En otras páginas:
+   * - Visible desde el inicio
+   */
+  const shouldShow = isHome ? scrolled : true;
+
   return (
     <>
       <header
         className={[
-          "fixed top-0 z-50 w-full transition-all duration-500",
-          scrolled
-            ? "bg-[var(--background)]/85 backdrop-blur-md border-b border-current/10"
-            : "bg-transparent",
+          "fixed top-0 left-0 z-50 w-full transition-all duration-700",
+          shouldShow
+            ? "translate-y-0 opacity-100 bg-[var(--background)]/85 backdrop-blur-md border-b border-current/10"
+            : "-translate-y-6 opacity-0",
         ].join(" ")}
       >
         <Container className="flex h-20 items-center justify-between md:h-24">
